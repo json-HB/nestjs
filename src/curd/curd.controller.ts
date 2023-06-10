@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Req,
 } from '@nestjs/common';
 import { CurdService } from './curd.service';
 import { CreateCurdDto } from './dto/create-curd.dto';
@@ -15,9 +17,15 @@ import { UpdateCurdDto } from './dto/update-curd.dto';
 export class CurdController {
   constructor(private readonly curdService: CurdService) {}
 
+  @Get('user')
+  findUser(@Query('id') id: string) {
+    return this.curdService.findUser(id);
+  }
+
   @Post()
-  create(@Body() createCurdDto: CreateCurdDto) {
-    return this.curdService.create(createCurdDto);
+  create(@Body() body) {
+    console.log(body);
+    return this.curdService.create(body);
   }
 
   @Get()
@@ -39,5 +47,15 @@ export class CurdController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.curdService.remove(+id);
+  }
+
+  @Post('m2m')
+  manyToMany(@Body() body) {
+    return this.curdService.m2m(body);
+  }
+
+  @Post('o2o')
+  oneToOne(@Body() body) {
+    return this.curdService.o2o(body);
   }
 }
